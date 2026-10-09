@@ -81,5 +81,167 @@ modelo.fit(
     X_train,
     y_train
 )
+# ==========================================
+# 7. REALIZAR PREDICCIONES
+# ==========================================
 
+predicciones = modelo.predict(
+    X_test
+)
+
+
+# ==========================================
+# 8. PRECISIÓN DEL MODELO
+# ==========================================
+
+precision = accuracy_score(
+    y_test,
+    predicciones
+)
+
+print("\n======================================")
+print("RESULTADOS DEL MODELO")
+print("======================================")
+
+print(
+    f"\nPrecisión: {precision * 100:.2f}%"
+)
+
+
+# ==========================================
+# 9. MATRIZ DE CONFUSIÓN
+# ==========================================
+
+matriz = confusion_matrix(
+    y_test,
+    predicciones
+)
+
+print("\nMatriz de confusión:")
+
+print(matriz)
+
+
+# ==========================================
+# 10. REPORTE DE CLASIFICACIÓN
+# ==========================================
+
+print("\nReporte de clasificación:")
+
+print(
+    classification_report(
+        y_test,
+        predicciones,
+        zero_division=0
+    )
+)
+
+
+# ==========================================
+# 11. REGLAS APRENDIDAS
+# ==========================================
+
+reglas = export_text(
+    modelo,
+    feature_names=list(X.columns)
+)
+
+print("\n======================================")
+print("REGLAS APRENDIDAS POR EL ÁRBOL")
+print("======================================")
+
+print(reglas)
+
+
+# ==========================================
+# 12. NUEVA PREDICCIÓN
+# ==========================================
+
+print("\n======================================")
+print("NUEVA PREDICCIÓN")
+print("======================================")
+
+
+pasajeros = int(
+    input(
+        "\nCantidad de pasajeros: "
+    )
+)
+
+numero_paradas = int(
+    input(
+        "Número de paradas: "
+    )
+)
+
+transbordos = int(
+    input(
+        "Número de transbordos: "
+    )
+)
+
+tiempo_estimado = int(
+    input(
+        "Tiempo estimado en minutos: "
+    )
+)
+
+
+while True:
+
+    hora_pico = int(
+        input(
+            "¿Es hora pico? "
+            "1 = Sí / 0 = No: "
+        )
+    )
+
+    if hora_pico in [0, 1]:
+        break
+
+    print(
+        "Ingrese únicamente 1 o 0."
+    )
+
+
+nuevo_viaje = pd.DataFrame(
+    [
+        {
+            "pasajeros": pasajeros,
+            "numero_paradas": numero_paradas,
+            "transbordos": transbordos,
+            "tiempo_estimado": tiempo_estimado,
+            "hora_pico": hora_pico
+        }
+    ]
+)
+
+
+resultado = modelo.predict(
+    nuevo_viaje
+)
+
+
+print("\n======================================")
+print("PREDICCIÓN DEL SISTEMA")
+print("======================================")
+
+print(
+    f"\nResultado: {resultado[0]}"
+)
+
+
+if resultado[0] == "Si":
+
+    print(
+        "El sistema predice que "
+        "el viaje puede presentar retraso."
+    )
+
+else:
+
+    print(
+        "El sistema predice que "
+        "el viaje llegará a tiempo."
+    )
 
